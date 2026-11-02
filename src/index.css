@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  /* 주색: 맑은 블루 */
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9eaff;
+  --color-brand-500: #1f7ae0;
+  --color-brand-600: #0b63ce;
+  --color-brand-700: #0a4fa6;
+  --color-brand-900: #0b2a55;
+  /* 보조색: 경기장 트랙 */
+  --color-track-500: #d9552b;
+  --color-track-600: #bf4420;
+  --color-ink: #0f172a;
+  --color-paper: #ffffff;
+}
+
+/* 시스템 다크모드에서도 글자가 사라지지 않도록 배경·글자색을 명시 */
+:root {
+  color-scheme: light;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
