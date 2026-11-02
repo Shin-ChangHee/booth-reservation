@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "verify:anon": "node --env-file=.env scripts/verify-anon.ts",
+    "test:db:local": "bash supabase/tests/run-local.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",

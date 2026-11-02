@@ -20,6 +20,14 @@
 - `npm run dev` — 개발 서버
 - `npm run build` — 타입 검사 + 프로덕션 빌드
 - `npm run typecheck` — 타입 검사만
+- `npm run test:db:local` — 로컬 Postgres에 마이그레이션 적용 + `supabase/tests/phase1_checks.sql` 실행
+- `npm run verify:anon` — 실제 Supabase에 anon 키로 권한 검사 (`.env` 필요)
+
+## DB 규칙
+- RPC 결과는 jsonb: 성공 `{ok:true,...}`, 실패 `{ok:false,error:'코드'}`. 오류 코드는 PLAN.md 6장 기준.
+- 내부 도우미 함수는 `private` 스키마(API 비노출). 공개 함수는 `security definer` + `set search_path = ''`.
+- 새 함수는 PUBLIC/anon/authenticated 실행 권한을 먼저 revoke 한 뒤 필요한 역할에만 grant.
+- 스태프 함수는 첫 줄에서 `private.assert_staff()` 호출.
 
 ## 구조
 - `src/pages/` — `Visitor`(`/`), `Admin`(`/admin`), `Board`(`/board`), `Poster`(`/poster`)
