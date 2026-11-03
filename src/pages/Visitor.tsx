@@ -19,6 +19,7 @@ import { clearSavedCode, getDeviceToken, getSavedCode, saveCode } from '../lib/d
 import { formatDateTime, isDevTimeOverride, now, syncServerTime } from '../lib/time'
 import { usePolling } from '../lib/usePolling'
 import { Logo } from '../components/Logo'
+import { SurveyLink } from '../components/SurveyLink'
 
 const POLL_MS = 15_000
 
@@ -215,9 +216,12 @@ export default function Visitor() {
           </div>
         )}
         {done && (
-          <Button variant="secondary" onClick={dismissBooking}>
-            닫기
-          </Button>
+          <>
+            <Button variant="secondary" onClick={dismissBooking}>
+              닫기
+            </Button>
+            <SurveyLink />
+          </>
         )}
       </div>
     )
@@ -279,6 +283,7 @@ export default function Visitor() {
                 {state?.booth_title ?? BOOTH.defaultTitle}
               </h1>
               <p className="mt-2 text-lg leading-relaxed text-slate-700">{BOOTH.description}</p>
+              <SurveyLink variant="inline" className="mt-3" />
             </>
           )}
           {booking && <h1 className="sr-only">내 예약</h1>}
