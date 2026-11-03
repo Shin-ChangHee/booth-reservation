@@ -7,7 +7,7 @@ export function SurveyLink({ variant = 'block', className = '' }: { variant?: 'b
   const styles =
     variant === 'block'
       ? 'min-h-14 w-full rounded-2xl bg-brand-600 px-5 text-lg text-white hover:bg-brand-700 active:bg-brand-900'
-      : 'min-h-12 rounded-xl border-2 border-brand-600 bg-white px-4 text-base text-brand-700 hover:bg-brand-50 active:bg-brand-100'
+      : 'min-h-14 w-full rounded-2xl border-2 border-brand-600 bg-white px-5 text-lg text-brand-700 hover:bg-brand-50 active:bg-brand-100'
   return (
     <a href={BOOTH.surveyUrl} target="_blank" rel="noopener noreferrer" className={`${base} ${styles} ${className}`}>
       만족도 조사 참여하기
