@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { BOOTH } from '../../lib/booth'
 import { supabase } from '../../lib/supabase'
 import { Button, Notice } from '../ui'
+import { Logo } from '../Logo'
 
 export function LoginForm({ notice, onSignedIn }: { notice: string | null; onSignedIn: () => void }) {
   const [email, setEmail] = useState('')
@@ -30,6 +31,7 @@ export function LoginForm({ notice, onSignedIn }: { notice: string | null; onSig
 
   return (
     <main className="mx-auto max-w-sm px-4 py-12">
+      <Logo eager className="mb-6 h-10" />
       <p className="text-base font-bold text-track-600">{BOOTH.number} 스태프</p>
       <h1 className="mt-1 text-2xl font-extrabold">예약 관리 로그인</h1>
       <form onSubmit={submit} className="mt-8 flex flex-col gap-4 rounded-2xl border-2 border-slate-200 bg-white p-5">

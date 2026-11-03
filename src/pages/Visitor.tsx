@@ -18,6 +18,7 @@ import { BOOTH } from '../lib/booth'
 import { clearSavedCode, getDeviceToken, getSavedCode, saveCode } from '../lib/device'
 import { formatDateTime, isDevTimeOverride, now, syncServerTime } from '../lib/time'
 import { usePolling } from '../lib/usePolling'
+import { Logo } from '../components/Logo'
 
 const POLL_MS = 15_000
 
@@ -293,9 +294,12 @@ export default function Visitor() {
 
         {content}
 
-        <footer className="mt-10 border-t border-slate-200 pt-4 text-sm leading-relaxed text-slate-500">
-          <p>{BOOTH.eventName}</p>
-          <p>{BOOTH.organization} · 개인정보를 수집하지 않아요.</p>
+        <footer className="mt-10 flex items-end justify-between gap-4 border-t border-slate-200 pt-4 text-sm leading-relaxed text-slate-500">
+          <div>
+            <p>{BOOTH.eventName}</p>
+            <p>{BOOTH.organization} · 개인정보를 수집하지 않아요.</p>
+          </div>
+          <Logo className="h-9 shrink-0" />
         </footer>
       </main>
 

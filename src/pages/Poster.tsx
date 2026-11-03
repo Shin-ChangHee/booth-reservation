@@ -1,6 +1,7 @@
 import { QrCode } from '../components/QrCode'
 import { BOOTH } from '../lib/booth'
 import { getPublicUrl, isLocalUrl } from '../lib/publicUrl'
+import { Logo } from '../components/Logo'
 
 const STEPS = [
   { title: '휴대폰 카메라로 QR코드를 찍어요', body: '앱 설치나 회원가입은 필요 없어요.' },
@@ -102,8 +103,12 @@ export default function Poster() {
             줄이 짧을 때는 예약 없이 바로 체험하실 수 있어요.
           </p>
           <div className="mt-[4mm] flex items-end justify-between border-t-[0.4mm] border-slate-200 pt-[4mm] text-[10pt] text-slate-500">
-            <span>{BOOTH.eventName}</span>
-            <span>{BOOTH.organization}</span>
+            <span>
+              {BOOTH.eventName}
+              <br />
+              {BOOTH.organization}
+            </span>
+            <Logo eager className="h-[15mm]" />
           </div>
         </div>
       </article>

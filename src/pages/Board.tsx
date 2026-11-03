@@ -6,6 +6,7 @@ import { BOOTH } from '../lib/booth'
 import { getPublicUrl } from '../lib/publicUrl'
 import { formatRange, formatTime, now, syncServerTime } from '../lib/time'
 import { usePolling } from '../lib/usePolling'
+import { Logo } from '../components/Logo'
 
 const POLL_MS = 15_000
 
@@ -73,9 +74,12 @@ export default function Board() {
           <p className="text-[clamp(1.25rem,2.4vw,2rem)] font-bold text-track-600">{BOOTH.number}</p>
           <h1 className="text-[clamp(1.75rem,3.6vw,3.25rem)] leading-tight font-extrabold">{state?.booth_title ?? BOOTH.defaultTitle}</h1>
         </div>
-        <p className="text-[clamp(2rem,4.5vw,4rem)] font-extrabold text-slate-700">
-          <Clock />
-        </p>
+        <div className="flex shrink-0 items-center gap-[2.5vw]">
+          <Logo eager className="h-[clamp(2.75rem,min(8vh,7vw),5.5rem)]" />
+          <p className="text-[clamp(2rem,4.5vw,4rem)] font-extrabold text-slate-700">
+            <Clock />
+          </p>
+        </div>
       </header>
 
       {!state ? (
