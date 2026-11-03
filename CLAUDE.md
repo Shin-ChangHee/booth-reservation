@@ -22,6 +22,7 @@
 - `npm run typecheck` — 타입 검사만
 - `npm run test:db:local` — 로컬 Postgres에 마이그레이션 적용 + `supabase/tests/phase1_checks.sql` 실행
 - `npm run verify:anon` — 실제 Supabase에 anon 키로 권한 검사 (`.env` 필요)
+- `npm run make-qr -- <배포 주소>` — 인쇄용 QR (`public/qr.png`, `public/qr.svg`). 주소 생략 시 `VITE_PUBLIC_URL`
 
 ## DB 규칙
 - RPC 결과는 jsonb: 성공 `{ok:true,...}`, 실패 `{ok:false,error:'코드'}`. 오류 코드는 PLAN.md 6장 기준.
