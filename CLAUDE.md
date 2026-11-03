@@ -22,6 +22,7 @@
 - `npm run typecheck` — 타입 검사만
 - `npm run test:db:local` — 로컬 Postgres에 마이그레이션 적용 + `supabase/tests/phase1_checks.sql` 실행
 - `npm run verify:anon` — 실제 Supabase에 anon 키로 권한 검사 (`.env` 필요)
+- `npm run load-test` — 동시 예약·규칙 테스트 (`DATABASE_URL` 필요, 실제 서버는 `--confirm`, 로컬 DB 직접은 `--direct`). 결과: `docs/TEST_RESULTS.md`
 - `npm run make-qr -- <배포 주소>` — 인쇄용 QR (`public/qr.png`, `public/qr.svg`). 주소 생략 시 `VITE_PUBLIC_URL`
 
 ## DB 규칙

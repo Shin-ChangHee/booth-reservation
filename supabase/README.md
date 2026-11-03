@@ -30,3 +30,7 @@ Supabase CLI를 쓴다면 `supabase link` 후 `supabase db push`로 한 번에 �
 ## 로컬 테스트 (개발용)
 로컬 Postgres 16 이상이 있으면 `npm run test:db:local`로 새 DB에 마이그레이션을 적용하고 검증 SQL을 실행합니다.
 `tests/local_supabase_roles.sql`은 로컬에서 Supabase 역할을 흉내 내는 파일이므로 Supabase에는 실행하지 마세요.
+
+## 동시 예약 테스트 (Phase 6)
+`.env`에 `DATABASE_URL`(Connect → Session pooler 연결 문자열)을 넣고 `npm run load-test -- --confirm`.
+테스트 데이터는 스스로 지웁니다. 행사 중에는 실행하지 마세요. 결과 기록: `docs/TEST_RESULTS.md`
