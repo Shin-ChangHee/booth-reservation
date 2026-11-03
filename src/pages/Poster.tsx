@@ -13,7 +13,7 @@ const RULES = [
   '체험 시간대마다 정원이 있어요.',
   '지정 시간 안에 오시면 우선 체험하실 수 있어요.',
   '시간이 지나면 현장 대기 순서로 안내해 드려요.',
-  '휴대폰 한 대당 1건만 예약할 수 있어요.',
+  '스마트폰 1대당 1건만 예약할 수 있어요.',
   '이름, 전화번호 등 개인정보는 받지 않아요.',
 ]
 
@@ -60,7 +60,7 @@ export default function Poster() {
 
         <div className="flex flex-1 flex-col px-[16mm] pt-[11mm] pb-[10mm]">
           <p className="text-[15pt] font-bold text-track-600">
-            {BOOTH.number} · {BOOTH.location}
+            {BOOTH.organizationFull}
           </p>
           <h1 className="mt-[2mm] text-[27pt] leading-[1.2] font-extrabold">{BOOTH.defaultTitle}</h1>
           <p className="mt-[3mm] text-[17pt] leading-snug font-bold text-brand-700">
