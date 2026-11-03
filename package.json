@@ -11,7 +11,8 @@
     "verify:anon": "node --env-file=.env scripts/verify-anon.ts",
     "test:db:local": "bash supabase/tests/run-local.sh",
     "make-qr": "node --env-file-if-exists=.env scripts/make-qr.ts",
-    "load-test": "node --env-file-if-exists=.env scripts/load-test.ts"
+    "load-test": "node --env-file-if-exists=.env scripts/load-test.ts",
+    "db:bundle": "node scripts/bundle-sql.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",

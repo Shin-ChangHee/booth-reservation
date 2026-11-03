@@ -1,7 +1,13 @@
 # Supabase 적용 방법
 
 ## 1. 마이그레이션 적용 (최초 1회)
-Supabase 대시보드 → **SQL Editor** → New query 에서 아래 파일을 **순서대로** 하나씩 붙여넣고 실행합니다.
+
+**가장 쉬운 방법**: `setup_all.sql` 파일 **내용 전체**를 복사해 SQL Editor에 붙여넣고 Run.
+테이블·권한·함수 생성과 2026-11-17 시간대 생성(아래 2번)까지 한 번에 끝납니다.
+(파일 이름이 아니라 파일 **안의 SQL 내용**을 붙여넣어야 합니다. GitHub에서 파일을 열고 오른쪽 위 복사 버튼 사용)
+migrations를 고친 뒤에는 `npm run db:bundle`로 이 파일을 다시 만듭니다.
+
+또는 Supabase 대시보드 → **SQL Editor** → New query 에서 아래 파일을 **순서대로** 하나씩 붙여넣고 실행합니다.
 
 1. `migrations/20261102000001_schema.sql` — 테이블, enum, RLS
 2. `migrations/20261102000002_helpers.sql` — 내부 도우미 함수 (`private` 스키마)

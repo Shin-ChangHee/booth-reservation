@@ -9,8 +9,7 @@
 
 `supabase/README.md` 순서대로:
 
-- [ ] 마이그레이션 5개 적용
-- [ ] `supabase/seed/generate_slots.sql` 실행 (행사일 시간대 생성)
+- [ ] `supabase/setup_all.sql` **내용 전체**를 SQL Editor에 붙여넣고 Run (마이그레이션 5개 + 시간대 생성을 한 번에)
 - [ ] `supabase/tests/phase1_checks.sql` 실행 → 전부 `true`
 - [ ] Authentication → **Allow new users to sign up 끄기**, **Allow anonymous sign-ins 끄기**
 - [ ] Authentication → Users → **Add user**로 스태프 공용 계정 생성 (Auto Confirm 체크)
