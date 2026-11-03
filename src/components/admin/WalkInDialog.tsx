@@ -67,10 +67,10 @@ export function WalkInDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="walkin-title"
-        className="flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-3xl bg-white text-ink shadow-2xl sm:rounded-3xl"
+        className="flex max-h-[90dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl bg-white text-ink shadow-2xl sm:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="border-b-2 border-slate-100 px-5 pt-5 pb-4">
+        <div className="shrink-0 border-b-2 border-slate-100 px-5 pt-5 pb-4">
           <h2 id="walkin-title" className="text-2xl font-extrabold">현장 등록</h2>
           <p className="mt-1 text-base text-slate-600">휴대폰이 없는 분이나 종이 카드를 받은 분을 시간대에 직접 넣어요.</p>
         </div>
@@ -90,7 +90,9 @@ export function WalkInDialog({
           </div>
         ) : (
           <>
-            <fieldset className="flex-1 overflow-y-auto px-5 py-3">
+            {/* 스크롤 영역: fieldset은 flex 안에서 overflow가 제대로 동작하지 않아 div로 감싼다 */}
+            <div data-slot-list className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-3">
+            <fieldset className="m-0 min-w-0 border-0 p-0">
               <legend className="sr-only">시간대 선택</legend>
               {options.length === 0 && <p className="py-4 text-base text-slate-500">남은 시간대가 없어요.</p>}
               {options.map((s) => {
@@ -115,7 +117,8 @@ export function WalkInDialog({
                 )
               })}
             </fieldset>
-            <div className="flex flex-col gap-3 border-t-2 border-slate-100 px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+            </div>
+            <div className="flex shrink-0 flex-col gap-3 border-t-2 border-slate-100 bg-white px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
               {error && <Notice tone={needsForce ? 'warn' : 'error'}>{error}</Notice>}
               {needsForce ? (
                 <Button variant="danger" onClick={() => submit(true)} disabled={submitting}>
