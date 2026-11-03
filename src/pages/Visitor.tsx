@@ -267,9 +267,12 @@ export default function Visitor() {
       <TrackStripe />
       <main className="mx-auto max-w-md px-4 pt-5 pb-12">
         <header className={booking ? 'mb-4' : 'mb-6'}>
-          <p className="text-base font-bold text-track-600">
-            {BOOTH.number} · 6층 그레이스홀 로비
-          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-base font-bold text-track-600">
+              {BOOTH.number} · 6층 그레이스홀 로비
+            </p>
+            <Logo eager className="h-9 shrink-0" />
+          </div>
           {!booking && (
             <>
               <h1 className="mt-1 text-[1.625rem] leading-tight font-extrabold text-ink">
@@ -294,12 +297,11 @@ export default function Visitor() {
 
         {content}
 
-        <footer className="mt-10 flex items-end justify-between gap-4 border-t border-slate-200 pt-4 text-sm leading-relaxed text-slate-500">
+        <footer className="mt-10 border-t border-slate-200 pt-4 text-sm leading-relaxed text-slate-500">
           <div>
             <p>{BOOTH.eventName}</p>
             <p>{BOOTH.organization} · 개인정보를 수집하지 않아요.</p>
           </div>
-          <Logo className="h-9 shrink-0" />
         </footer>
       </main>
 
