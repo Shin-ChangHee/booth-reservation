@@ -40,3 +40,7 @@
 - 큰 글씨, 터치 영역 최소 48px, 높은 대비. 시각·코드는 `tabular-nums`.
 - 주색 블루(`brand-*`), 보조색 트랙 오렌지(`track-*`). 그라데이션·이모지 남발 금지.
 - 배경색을 명시해 시스템 다크모드에서도 글자가 보이게 한다.
+
+## 배포
+- `docs/DEPLOY.md` 참고. Vercel(`vercel.json`) 또는 Netlify(`netlify.toml`) — SPA 새로고침 대응, noindex·보안 헤더, `/assets` 장기 캐시.
+- 환경변수 `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` 필수 (배포 환경에서 없으면 빌드 실패), `VITE_PUBLIC_URL` 선택.
