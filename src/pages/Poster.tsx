@@ -62,15 +62,15 @@ export default function Poster() {
           <p className="text-[15pt] font-bold text-track-600">
             {BOOTH.number} · {BOOTH.location}
           </p>
-          <h1 className="mt-[2mm] text-[30pt] leading-[1.2] font-extrabold">{BOOTH.defaultTitle}</h1>
+          <h1 className="mt-[2mm] text-[27pt] leading-[1.2] font-extrabold">{BOOTH.defaultTitle}</h1>
           <p className="mt-[3mm] text-[17pt] leading-snug font-bold text-brand-700">
             줄 서지 말고, 체험 시간을 예약하세요.
           </p>
 
           <div className="mt-[12mm] flex items-center gap-[9mm]">
             <div className="shrink-0 text-center">
-              <QrCode value={url} label="예약 페이지 QR코드" className="size-[88mm] rounded-[4mm] border-[0.8mm] border-slate-300" />
-              <p className="mt-[2mm] max-w-[88mm] text-[9pt] break-all text-slate-500">{url}</p>
+              <QrCode value={url} label="예약 페이지 QR코드" className="size-[80mm] rounded-[4mm] border-[0.8mm] border-slate-300" />
+              <p className="mt-[2mm] max-w-[80mm] text-[9pt] break-all text-slate-500">{url}</p>
             </div>
             <ol className="flex flex-col gap-[6mm]">
               {STEPS.map((s, i) => (
@@ -87,7 +87,7 @@ export default function Poster() {
             </ol>
           </div>
 
-          <section className="mt-[14mm] rounded-[4mm] border-[0.6mm] border-slate-300 px-[8mm] py-[6mm]">
+          <section className="mt-[10mm] rounded-[4mm] border-[0.6mm] border-slate-300 px-[8mm] py-[6mm]">
             <h2 className="text-[16pt] font-extrabold">이용 안내</h2>
             <ul className="mt-[4mm] flex flex-col gap-[3mm] text-[14pt] leading-snug text-slate-800">
               {RULES.map((r) => (

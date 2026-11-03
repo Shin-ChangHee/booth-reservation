@@ -247,7 +247,7 @@ export default function Visitor() {
         <div>
           <h2 className="text-xl font-bold text-ink">체험 시간 고르기</h2>
           <p className="mt-1 text-base leading-relaxed text-slate-600">
-            지정 시간 안에 오시면 우선 체험하실 수 있어요. 기기 한 대당 1건만 예약돼요.
+            지정 시간 안에 오시면 우선 체험하실 수 있어요. 스마트폰 1대당 1건만 예약돼요.
           </p>
         </div>
         {visibleSlots.length > 0 ? (
@@ -269,7 +269,7 @@ export default function Visitor() {
         <header className={booking ? 'mb-4' : 'mb-6'}>
           <div className="flex items-center justify-between gap-3">
             <p className="text-base font-bold text-track-600">
-              {BOOTH.number} · 6층 그레이스홀 로비
+              {BOOTH.organizationFull}
             </p>
             <Logo eager className="h-9 shrink-0" />
           </div>

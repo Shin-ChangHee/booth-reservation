@@ -72,7 +72,7 @@ export default function Board() {
       <header className="flex items-center justify-between gap-6 px-[4vw] pt-[3vh]">
         <div>
           <p className="text-[clamp(1.25rem,2.4vw,2rem)] font-bold text-track-600">{BOOTH.number}</p>
-          <h1 className="text-[clamp(1.75rem,3.6vw,3.25rem)] leading-tight font-extrabold">{state?.booth_title ?? BOOTH.defaultTitle}</h1>
+          <h1 className="text-[clamp(1.5rem,3.1vw,2.875rem)] leading-tight font-extrabold">{state?.booth_title ?? BOOTH.defaultTitle}</h1>
         </div>
         <div className="flex shrink-0 items-center gap-[2.5vw]">
           <Logo eager className="h-[clamp(2.75rem,min(8vh,7vw),5.5rem)]" />
@@ -114,7 +114,7 @@ export default function Board() {
           </div>
 
           <section className="flex flex-col items-center text-center">
-            <QrCode value={url} label="예약 페이지 QR코드" className="aspect-square w-[min(38vw,52vh)] rounded-3xl border-4 border-slate-200 portrait:w-[min(60vw,30vh)]" />
+            <QrCode value={url} label="예약 페이지 QR코드" className="aspect-square w-[min(38vw,46vh)] rounded-3xl border-4 border-slate-200 portrait:w-[min(60vw,30vh)]" />
             <p className="mt-[2vh] text-[clamp(1.5rem,3vw,2.75rem)] leading-snug font-extrabold">
               휴대폰 카메라로 찍고
               <br />
