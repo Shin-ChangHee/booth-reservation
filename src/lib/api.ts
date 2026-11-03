@@ -43,9 +43,11 @@ export type CancelResult =
 
 // ---------- 오류 ----------
 /** 통신 자체가 실패한 경우 (네트워크, 시간 초과, 설정 누락 등) */
+export type ApiErrorKind = 'NETWORK' | 'NOT_CONFIGURED' | 'UNAUTHORIZED'
+
 export class ApiError extends Error {
-  readonly kind: 'NETWORK' | 'NOT_CONFIGURED'
-  constructor(kind: 'NETWORK' | 'NOT_CONFIGURED', message?: string) {
+  readonly kind: ApiErrorKind
+  constructor(kind: ApiErrorKind, message?: string) {
     super(message ?? kind)
     this.kind = kind
   }
@@ -62,6 +64,7 @@ export const VISITOR_MESSAGES: Record<string, string> = {
   NOT_FOUND: '예약을 찾지 못했어요.',
   NETWORK: '연결이 불안정해요. 잠시 후 다시 눌러 주세요.',
   NOT_CONFIGURED: '예약 서버 설정이 아직 끝나지 않았어요. 부스 스태프에게 알려 주세요.',
+  UNAUTHORIZED: '로그인이 필요해요.',
 }
 
 // ---------- RPC 호출 ----------
@@ -75,7 +78,12 @@ async function rpc<T>(fn: string, args?: Record<string, unknown>): Promise<T> {
   } catch (e) {
     throw new ApiError('NETWORK', String(e))
   }
-  if (result.error) throw new ApiError('NETWORK', result.error.message)
+  if (result.error) {
+    const { code, message } = result.error
+    const unauthorized =
+      result.status === 401 || code === '42501' || code === 'PGRST301' || /NOT_AUTHORIZED|JWT/i.test(message)
+    throw new ApiError(unauthorized ? 'UNAUTHORIZED' : 'NETWORK', message)
+  }
   return result.data as T
 }
 
@@ -93,4 +101,86 @@ export const cancelMyBooking = (deviceToken: string, code: string) =>
 export function messageFor(e: unknown): string {
   if (e instanceof ApiError) return VISITOR_MESSAGES[e.kind]
   return VISITOR_MESSAGES.NETWORK
+}
+
+// =============================================================
+// 스태프용
+// =============================================================
+export type BookingSource = 'qr' | 'walk_in'
+
+export type AdminBooking = {
+  id: string
+  code: string
+  status: BookingStatus
+  source: BookingSource
+  created_at: string
+  checked_in_at: string | null
+  cancelled_at: string | null
+}
+
+export type AdminSlot = {
+  id: number
+  starts_at: string
+  ends_at: string
+  capacity: number
+  is_closed: boolean
+  booked_count: number
+  checked_in_count: number
+  cancelled_count: number
+  walk_in_count: number
+  active_count: number
+  bookings: AdminBooking[]
+}
+
+export type AdminState = {
+  now: string
+  settings: { booking_open: boolean; booth_title: string; notice: string | null; updated_at: string }
+  slots: AdminSlot[]
+}
+
+/** 예약 + 시간대 정보 (방문 처리·현장 등록 결과) */
+export type AdminBookingDetail = AdminBooking & { slot_id: number; starts_at: string; ends_at: string }
+
+export type CheckInResult = {
+  ok: boolean
+  result: 'CHECKED_IN' | 'ALREADY_CHECKED_IN' | 'CANCELLED' | 'NOT_FOUND'
+  booking?: AdminBookingDetail
+}
+
+export type AdminResult<T = object> = ({ ok: true } & T) | { ok: false; error: string }
+
+export const adminList = () => rpc<AdminState>('admin_list')
+
+export const adminCheckIn = (code: string) => rpc<CheckInResult>('admin_check_in', { p_code: code })
+
+export const adminSetStatus = (bookingId: string, status: BookingStatus, force = false) =>
+  rpc<AdminResult<{ booking: AdminBookingDetail }>>('admin_set_status', {
+    p_booking_id: bookingId,
+    p_status: status,
+    p_force: force,
+  })
+
+export const adminWalkIn = (slotId: number, force = false) =>
+  rpc<AdminResult<{ booking: AdminBookingDetail }>>('admin_walk_in', { p_slot_id: slotId, p_force: force })
+
+export const adminUpdateSlot = (slotId: number, changes: { capacity?: number; isClosed?: boolean }) =>
+  rpc<AdminResult>('admin_update_slot', {
+    p_slot_id: slotId,
+    p_capacity: changes.capacity ?? null,
+    p_is_closed: changes.isClosed ?? null,
+  })
+
+export const adminSetBookingOpen = (open: boolean) =>
+  rpc<AdminResult<{ booking_open: boolean }>>('admin_set_booking_open', { p_open: open })
+
+/** 스태프 화면용 오류 문구 */
+export const ADMIN_MESSAGES: Record<string, string> = {
+  SLOT_FULL: '정원이 찼어요.',
+  SLOT_CLOSED: '닫힌 시간대예요.',
+  SLOT_UNAVAILABLE: '없는 시간대예요.',
+  NOT_FOUND: '찾을 수 없어요. 화면을 새로고침해 주세요.',
+  INVALID_REQUEST: '잘못된 요청이에요.',
+  NETWORK: '연결이 불안정해요. 잠시 후 다시 시도해 주세요.',
+  UNAUTHORIZED: '로그인이 만료됐어요. 다시 로그인해 주세요.',
+  NOT_CONFIGURED: '.env에 Supabase 설정이 없어요.',
 }
