@@ -31,6 +31,7 @@
 - 내부 도우미 함수는 `private` 스키마(API 비노출). 공개 함수는 `security definer` + `set search_path = ''`.
 - 새 함수는 PUBLIC/anon/authenticated 실행 권한을 먼저 revoke 한 뒤 필요한 역할에만 grant.
 - 스태프 함수는 첫 줄에서 `private.assert_staff()` 호출.
+- 운영 상태는 셋 중 하나: 접수 중(`booking_open`) / 접수 꺼짐(바로 체험) / 예약 마감(`booking_ended`, 새 예약 차단 `BOOKING_ENDED`). 접수를 켜면 마감이 풀리고, 마감하면 접수가 꺼진다.
 
 ## 구조
 - `src/pages/` — `Visitor`(`/`), `Admin`(`/admin`), `Board`(`/board`), `Poster`(`/poster`)

@@ -3,6 +3,7 @@ import {
   adminCheckIn,
   adminList,
   ADMIN_MESSAGES,
+  adminSetBookingEnded,
   adminSetBookingOpen,
   adminSetStatus,
   adminUpdateSlot,
@@ -144,7 +145,22 @@ export function Dashboard({ onSignOut }: { onSignOut: (message?: string) => void
     }
   }
 
-  const toggleOpen = () => data && run(() => adminSetBookingOpen(!data.settings.booking_open))
+  function toggleOpen() {
+    if (!data) return
+    if (data.settings.booking_ended && !window.confirm('예약 마감을 해제하고 예약 접수를 켤까요?')) return
+    void run(() => adminSetBookingOpen(!data.settings.booking_open))
+  }
+
+  function toggleEnded() {
+    if (!data) return
+    if (data.settings.booking_ended) {
+      if (!window.confirm('예약 마감을 해제할까요? 관람객 화면은 "바로 체험하실 수 있어요"로 돌아가요.')) return
+      void run(() => adminSetBookingEnded(false))
+    } else {
+      if (!window.confirm('예약을 마감할까요?\n관람객 화면에 "예약이 마감되었습니다"가 표시되고 새 예약이 막혀요.\n이미 받은 예약과 방문 처리·현장 등록은 그대로 할 수 있어요.')) return
+      void run(() => adminSetBookingEnded(true))
+    }
+  }
 
   const setCapacity = (slot: AdminSlot, capacity: number) => run(() => adminUpdateSlot(slot.id, { capacity }))
 
@@ -191,6 +207,7 @@ export function Dashboard({ onSignOut }: { onSignOut: (message?: string) => void
   }
 
   const open = data?.settings.booking_open ?? false
+  const ended = data?.settings.booking_ended ?? false
 
   return (
     <>
@@ -226,16 +243,16 @@ export function Dashboard({ onSignOut }: { onSignOut: (message?: string) => void
               disabled={!data || busy}
               onClick={toggleOpen}
               className={`flex min-h-16 items-center gap-4 rounded-2xl px-5 text-left transition-colors disabled:opacity-60 md:w-80 ${
-                open ? 'bg-brand-600 text-white hover:bg-brand-700' : 'bg-slate-200 text-ink hover:bg-slate-300'
+                open ? 'bg-brand-600 text-white hover:bg-brand-700' : ended ? 'bg-slate-700 text-white hover:bg-slate-800' : 'bg-slate-200 text-ink hover:bg-slate-300'
               }`}
             >
-              <span aria-hidden="true" className={`relative h-8 w-14 shrink-0 rounded-full ${open ? 'bg-white/30' : 'bg-slate-400'}`}>
+              <span aria-hidden="true" className={`relative h-8 w-14 shrink-0 rounded-full ${open || ended ? 'bg-white/30' : 'bg-slate-400'}`}>
                 <span className={`absolute top-1 size-6 rounded-full bg-white shadow transition-all ${open ? 'left-7' : 'left-1'}`} />
               </span>
               <span>
-                <span className="block text-xl font-extrabold">{open ? '예약 접수 중' : '예약 접수 꺼짐'}</span>
-                <span className={`block text-sm font-semibold ${open ? 'text-brand-100' : 'text-slate-600'}`}>
-                  {open ? '관람객이 시간대를 예약할 수 있어요' : '관람객 화면: "바로 체험하실 수 있어요"'}
+                <span className="block text-xl font-extrabold">{open ? '예약 접수 중' : ended ? '예약 마감됨' : '예약 접수 꺼짐'}</span>
+                <span className={`block text-sm font-semibold ${open ? 'text-brand-100' : ended ? 'text-slate-200' : 'text-slate-600'}`}>
+                  {open ? '관람객이 시간대를 예약할 수 있어요' : ended ? '관람객 화면: "예약이 마감되었습니다"' : '관람객 화면: "바로 체험하실 수 있어요"'}
                 </span>
               </span>
             </button>
@@ -275,6 +292,14 @@ export function Dashboard({ onSignOut }: { onSignOut: (message?: string) => void
             </button>
             <button type="button" onClick={downloadCsv} disabled={!data} className={`${barButton} border-2 border-slate-300 text-slate-700 hover:bg-slate-100`}>
               CSV로 내려받기
+            </button>
+            <button
+              type="button"
+              onClick={toggleEnded}
+              disabled={!data || busy}
+              className={`${barButton} border-2 ${ended ? 'border-slate-700 bg-slate-700 text-white hover:bg-slate-800' : 'border-track-500 text-track-600 hover:bg-orange-50'}`}
+            >
+              {ended ? '예약 마감 해제' : '예약 마감'}
             </button>
             <span className="tabular ml-1 text-sm text-slate-600">
               전체 예약 {totals.active} · 방문 {totals.checkedIn} · 현장 {totals.walkIn}

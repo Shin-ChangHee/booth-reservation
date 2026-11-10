@@ -225,6 +225,20 @@ export default function Visitor() {
         )}
       </div>
     )
+  } else if (state.booking_ended) {
+    // 예약 마감
+    content = (
+      <div className="flex flex-col gap-5">
+        <section className="rounded-3xl border-2 border-slate-300 bg-slate-50 px-6 py-8">
+          <p className="text-[1.75rem] leading-snug font-extrabold text-ink">예약이 마감되었습니다.</p>
+          <p className="mt-2 text-lg font-semibold text-slate-700">오늘 체험 예약 접수를 종료했어요. 관심 가져 주셔서 감사합니다.</p>
+          <p className="mt-6 border-t-2 border-slate-200 pt-4 text-base text-slate-600">
+            이미 예약하신 분은 예약한 휴대폰으로 이 주소를 다시 열면 확인코드를 볼 수 있어요.
+          </p>
+        </section>
+        {state.notice && <Notice tone="info">{state.notice}</Notice>}
+      </div>
+    )
   } else if (!state.booking_open) {
     // 상태 A: 예약 접수 중지
     content = (

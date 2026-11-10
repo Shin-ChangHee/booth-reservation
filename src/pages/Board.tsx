@@ -65,6 +65,7 @@ export default function Board() {
   const current = slots.find((s) => Date.parse(s.starts_at) <= t && t < Date.parse(s.ends_at)) ?? null
   const nextAvailable = slots.find((s) => Date.parse(s.starts_at) > t && s.remaining > 0) ?? null
   const open = state?.booking_open ?? false
+  const ended = state?.booking_ended ?? false
 
   return (
     <div className="flex min-h-dvh flex-col bg-white text-ink">
@@ -84,6 +85,13 @@ export default function Board() {
 
       {!state ? (
         <main className="flex flex-1 items-center justify-center text-3xl text-slate-500">{offline ? '연결을 기다리는 중…' : '불러오는 중…'}</main>
+      ) : ended ? (
+        // 예약 마감
+        <main className="flex flex-1 flex-col items-center justify-center px-[4vw] text-center">
+          <p className="text-[clamp(3rem,8vw,7rem)] leading-none font-extrabold text-ink">예약이 마감되었습니다</p>
+          <p className="mt-[3vh] text-[clamp(1.5rem,3.2vw,2.75rem)] font-bold text-slate-700">오늘 체험 예약 접수를 종료했어요.</p>
+          <p className="mt-[2vh] text-[clamp(1.25rem,2.4vw,2rem)] text-slate-600">관심 가져 주셔서 감사합니다.</p>
+        </main>
       ) : !open ? (
         // 접수 중지: 바로 체험
         <main className="flex flex-1 flex-col items-center justify-center px-[4vw] text-center">

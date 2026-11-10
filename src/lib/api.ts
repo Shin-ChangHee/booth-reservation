@@ -11,6 +11,8 @@ export type PublicSlot = {
 export type PublicState = {
   now: string
   booking_open: boolean
+  /** 예약 마감 (마이그레이션 007 이전 DB에는 없음 → undefined) */
+  booking_ended?: boolean
   booth_title: string
   notice: string | null
   slots: PublicSlot[]
@@ -27,6 +29,7 @@ export type MyBooking = {
 
 export type BookErrorCode =
   | 'BOOKING_CLOSED'
+  | 'BOOKING_ENDED'
   | 'SLOT_FULL'
   | 'SLOT_STARTED'
   | 'SLOT_UNAVAILABLE'
@@ -56,6 +59,7 @@ export class ApiError extends Error {
 /** 서버 오류 코드 → 관람객 문구 */
 export const VISITOR_MESSAGES: Record<string, string> = {
   BOOKING_CLOSED: '지금은 예약 없이 바로 체험하실 수 있어요. 부스로 오세요.',
+  BOOKING_ENDED: '예약이 마감되었습니다.',
   SLOT_FULL: '방금 마감됐어요. 다른 시간대를 골라 주세요.',
   SLOT_STARTED: '이미 시작된 시간대예요. 다음 시간대를 골라 주세요.',
   SLOT_UNAVAILABLE: '지금은 예약할 수 없는 시간대예요. 다른 시간대를 골라 주세요.',
@@ -134,7 +138,7 @@ export type AdminSlot = {
 
 export type AdminState = {
   now: string
-  settings: { booking_open: boolean; booth_title: string; notice: string | null; updated_at: string }
+  settings: { booking_open: boolean; booking_ended?: boolean; booth_title: string; notice: string | null; updated_at: string }
   slots: AdminSlot[]
 }
 
@@ -172,6 +176,9 @@ export const adminUpdateSlot = (slotId: number, changes: { capacity?: number; is
 
 export const adminSetBookingOpen = (open: boolean) =>
   rpc<AdminResult<{ booking_open: boolean }>>('admin_set_booking_open', { p_open: open })
+
+export const adminSetBookingEnded = (ended: boolean) =>
+  rpc<AdminResult<{ booking_ended: boolean }>>('admin_set_booking_ended', { p_ended: ended })
 
 /** 스태프 화면용 오류 문구 */
 export const ADMIN_MESSAGES: Record<string, string> = {

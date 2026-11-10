@@ -22,6 +22,7 @@ do $test$
 declare
   v_me        text := current_user;
   v_open_was  boolean;
+  v_ended_was boolean;
   base        timestamptz := date_trunc('minute', now()) + interval '17 seconds';
   s_future    bigint;
   s_future2   bigint;
@@ -39,7 +40,7 @@ declare
   err         text;
   v_bid       uuid;
 begin
-  select booking_open into v_open_was from public.settings where id = 1;
+  select booking_open, booking_ended into v_open_was, v_ended_was from public.settings where id = 1;
 
   -- ---------- 준비: 테스트 시간대 ----------
   insert into public.slots (starts_at, ends_at, capacity) values (base + interval '1 hour',  base + interval '70 minutes',  3) returning id into s_future;
@@ -92,6 +93,7 @@ begin
   foreach err in array array[
     'select public.admin_list()',
     'select public.admin_set_booking_open(true)',
+    'select public.admin_set_booking_ended(true)',
     'select public.admin_check_in(''AAAA'')',
     'select public.admin_walk_in(1, true)',
     'select public.admin_update_slot(1, 99, false)',
@@ -312,6 +314,52 @@ begin
   insert into test_results (name, passed, detail) values ('A 접수 끄기 → 공개 상태 booking_open=false', not (r ->> 'booking_open')::boolean, left(r::text, 80));
 
   -- =========================================================
+  -- 3-1. 예약 마감 (booking_ended)
+  -- =========================================================
+  perform set_config('role', 'authenticated', true);
+  perform set_config('request.jwt.claims', '{"role":"authenticated"}', true);
+  r := public.admin_set_booking_open(true);
+  r := public.admin_set_booking_ended(true);
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 예약 마감 → ended=true, 접수도 꺼짐',
+    (select booking_ended and not booking_open from public.settings where id = 1), r::text);
+
+  perform set_config('role', 'anon', true);
+  perform set_config('request.jwt.claims', '{"role":"anon"}', true);
+  r := public.get_public_state();
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 공개 상태에 booking_ended=true', (r ->> 'booking_ended')::boolean, left(r::text, 80));
+
+  perform set_config('role', 'anon', true);
+  r := public.book_slot(s_future2, tok_c);
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 마감 상태 예약 → BOOKING_ENDED', r ->> 'error' = 'BOOKING_ENDED', r::text);
+
+  perform set_config('role', 'anon', true);
+  r := public.get_my_booking(tok_a, code_a);
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 마감돼도 기존 예약 조회 가능', r ->> 'code' = code_a, coalesce(r::text, 'null'));
+
+  perform set_config('role', 'authenticated', true);
+  perform set_config('request.jwt.claims', '{"role":"authenticated"}', true);
+  r := public.admin_walk_in(s_future2);
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 마감 중에도 현장 등록 가능', (r ->> 'ok')::boolean, r::text);
+
+  perform set_config('role', 'authenticated', true);
+  r := public.admin_set_booking_open(true);
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 접수 켜기 → 마감 해제',
+    (select booking_open and not booking_ended from public.settings where id = 1), r::text);
+
+  perform set_config('role', 'authenticated', true);
+  r := public.admin_set_booking_ended(true);
+  r := public.admin_set_booking_ended(false);
+  perform set_config('role', v_me, true);
+  insert into test_results (name, passed, detail) values ('E 마감 해제 → 접수 꺼짐 상태',
+    (select not booking_open and not booking_ended from public.settings where id = 1), r::text);
+
+  -- =========================================================
   -- 4. 시간대 생성 (postgres로 실행, 2099-01-01 사용)
   -- =========================================================
   r := public.generate_slots(date '2099-01-01', time '10:00', time '16:20', 10, 3, true);
@@ -344,7 +392,7 @@ begin
   delete from public.slots
   where id in (s_future, s_future2, s_started, s_small, s_closed)
      or (starts_at >= timestamptz '2099-01-01 00:00 Asia/Seoul' and starts_at < timestamptz '2099-01-02 00:00 Asia/Seoul');
-  update public.settings set booking_open = v_open_was where id = 1;
+  update public.settings set booking_open = v_open_was, booking_ended = v_ended_was where id = 1;
 end
 $test$;
 
