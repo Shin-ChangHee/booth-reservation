@@ -46,7 +46,7 @@ export type CancelResult =
 
 // ---------- 오류 ----------
 /** 통신 자체가 실패한 경우 (네트워크, 시간 초과, 설정 누락 등) */
-export type ApiErrorKind = 'NETWORK' | 'NOT_CONFIGURED' | 'UNAUTHORIZED'
+export type ApiErrorKind = 'NETWORK' | 'NOT_CONFIGURED' | 'UNAUTHORIZED' | 'SERVER_OUTDATED'
 
 export class ApiError extends Error {
   readonly kind: ApiErrorKind
@@ -69,6 +69,7 @@ export const VISITOR_MESSAGES: Record<string, string> = {
   NETWORK: '연결이 불안정해요. 잠시 후 다시 눌러 주세요.',
   NOT_CONFIGURED: '예약 서버 설정이 아직 끝나지 않았어요. 부스 스태프에게 알려 주세요.',
   UNAUTHORIZED: '로그인이 필요해요.',
+  SERVER_OUTDATED: '예약 서버 점검 중이에요. 부스 스태프에게 알려 주세요.',
 }
 
 // ---------- RPC 호출 ----------
@@ -86,7 +87,9 @@ async function rpc<T>(fn: string, args?: Record<string, unknown>): Promise<T> {
     const { code, message } = result.error
     const unauthorized =
       result.status === 401 || code === '42501' || code === 'PGRST301' || /NOT_AUTHORIZED|JWT/i.test(message)
-    throw new ApiError(unauthorized ? 'UNAUTHORIZED' : 'NETWORK', message)
+    // PGRST202: 함수를 찾을 수 없음 → Supabase에 최신 마이그레이션이 적용되지 않음
+    const outdated = code === 'PGRST202' || /Could not find the function/i.test(message)
+    throw new ApiError(outdated ? 'SERVER_OUTDATED' : unauthorized ? 'UNAUTHORIZED' : 'NETWORK', message)
   }
   return result.data as T
 }
@@ -190,4 +193,5 @@ export const ADMIN_MESSAGES: Record<string, string> = {
   NETWORK: '연결이 불안정해요. 잠시 후 다시 시도해 주세요.',
   UNAUTHORIZED: '로그인이 만료됐어요. 다시 로그인해 주세요.',
   NOT_CONFIGURED: '.env에 Supabase 설정이 없어요.',
+  SERVER_OUTDATED: 'DB 업데이트가 필요해요. Supabase SQL Editor에서 최신 SQL(supabase/migrations의 새 파일)을 실행해 주세요.',
 }
