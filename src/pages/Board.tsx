@@ -100,8 +100,8 @@ export default function Board() {
           <p className="mt-[2vh] text-[clamp(1.25rem,2.4vw,2rem)] text-slate-600">{BOOTH.description}</p>
         </main>
       ) : (
-        <main className="grid flex-1 grid-cols-1 items-center gap-[4vh] px-[4vw] py-[3vh] landscape:grid-cols-[1.15fr_1fr] landscape:gap-[4vw]">
-          <div className="flex flex-col gap-[3vh]">
+        <main className="grid flex-1 grid-cols-1 items-center gap-[4vh] px-[4vw] py-[3vh] portrait:gap-[2.5vh] portrait:py-[2vh] landscape:grid-cols-[1.15fr_1fr] landscape:gap-[4vw]">
+          <div className="flex flex-col gap-[3vh] portrait:gap-[2vh]">
             <section className="rounded-[2rem] border-4 border-track-500 px-[3vw] py-[3vh]">
               <p className="text-[clamp(1.25rem,2.6vw,2.25rem)] font-bold text-track-600">지금 체험 중</p>
               <p className="tabular mt-1 text-[clamp(2.5rem,5.4vw,6rem)] leading-none font-extrabold tracking-tight whitespace-nowrap portrait:text-[clamp(2.5rem,8.5vw,6rem)]">
@@ -122,13 +122,17 @@ export default function Board() {
           </div>
 
           <section className="flex flex-col items-center text-center">
-            <QrCode value={url} label="예약 페이지 QR코드" className="aspect-square w-[min(38vw,46vh)] rounded-3xl border-4 border-slate-200 portrait:w-[min(60vw,30vh)]" />
-            <p className="mt-[2vh] text-[clamp(1.5rem,3vw,2.75rem)] leading-snug font-extrabold">
+            <QrCode value={url} label="예약 페이지 QR코드" className="aspect-square w-[min(34vw,32vh)] rounded-3xl border-4 border-slate-200 portrait:w-[min(56vw,24vh)]" />
+            <p className="mt-[1.5vh] text-[clamp(1.25rem,2.5vw,2.375rem)] leading-snug font-extrabold">
               휴대폰 카메라로 찍고
               <br />
               체험 시간을 예약하세요
             </p>
             <p className="mt-1 text-[clamp(1rem,1.8vw,1.5rem)] text-slate-600">기다리지 않고 다른 부스를 둘러보다 오시면 돼요.</p>
+            <div className="mt-[1.5vh] w-full rounded-2xl border-2 border-track-500 bg-orange-50 px-[1.5vw] py-[1.2vh]">
+              <p className="text-[clamp(1rem,1.6vw,1.45rem)] leading-snug font-extrabold text-track-600">{BOOTH.souvenirNotice}</p>
+              <p className="mt-0.5 text-[clamp(0.95rem,1.5vw,1.3rem)] leading-snug font-semibold text-slate-800">{BOOTH.souvenirItems}</p>
+            </div>
           </section>
         </main>
       )}

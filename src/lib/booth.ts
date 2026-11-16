@@ -7,5 +7,7 @@ export const BOOTH = {
   defaultTitle: 'AI가 읽는 내 몸 - 체형 정렬 & 근골격계 위험도 분석 체험존',
   description: 'AI 카메라로 체형 정렬과 근골격계 위험도를 분석해 드려요.',
   eventName: '제4회 문화체육관광 디지털혁신 포럼',
+  souvenirNotice: '오후 2시부터 엘타워 5층에서 기념품 수령 가능합니다',
+  souvenirItems: '기념품: 백호돌이 담요, 백호돌이 장바구니',
   surveyUrl: 'https://www.gov-eformsign.com/?s=4CT2dp',
 } as const
