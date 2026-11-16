@@ -122,16 +122,15 @@ export default function Board() {
           </div>
 
           <section className="flex flex-col items-center text-center">
-            <QrCode value={url} label="예약 페이지 QR코드" className="aspect-square w-[min(34vw,32vh)] rounded-3xl border-4 border-slate-200 portrait:w-[min(56vw,24vh)]" />
+            <QrCode value={url} label="예약 페이지 QR코드" className="aspect-square w-[min(34vw,30vh)] rounded-3xl border-4 border-slate-200 portrait:w-[min(56vw,24vh)]" />
             <p className="mt-[1.5vh] text-[clamp(1.25rem,2.5vw,2.375rem)] leading-snug font-extrabold">
               휴대폰 카메라로 찍고
               <br />
               체험 시간을 예약하세요
             </p>
-            <p className="mt-1 text-[clamp(1rem,1.8vw,1.5rem)] text-slate-600">기다리지 않고 다른 부스를 둘러보다 오시면 돼요.</p>
-            <div className="mt-[1.5vh] w-full rounded-2xl border-2 border-track-500 bg-orange-50 px-[1.5vw] py-[1.2vh]">
-              <p className="text-[clamp(1rem,1.6vw,1.45rem)] leading-snug font-extrabold text-track-600">{BOOTH.souvenirNotice}</p>
-              <p className="mt-0.5 text-[clamp(0.95rem,1.5vw,1.3rem)] leading-snug font-semibold text-slate-800">{BOOTH.souvenirItems}</p>
+            <div className="mt-[2vh] w-full rounded-3xl bg-track-500 px-[2vw] py-[1.8vh] text-white shadow-lg">
+              <p className="text-[clamp(1.25rem,min(2.2vw,3vh),2.25rem)] leading-snug font-extrabold text-balance">{BOOTH.souvenirNotice}</p>
+              <p className="mt-[0.6vh] text-[clamp(1.15rem,min(2vw,2.7vh),2rem)] leading-snug font-bold text-orange-50 text-balance">{BOOTH.souvenirItems}</p>
             </div>
           </section>
         </main>
